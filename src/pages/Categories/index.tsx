@@ -1,102 +1,58 @@
 import ProductsList from '../../components/ProductsList'
-import Game from '../../models/Games'
 
-import resident from '../../assets/images/resident.png'
-import zelda from '../../assets/images/zelda.png'
-import starWars from '../../assets/images/star_wars.png'
-import diablo from '../../assets/images/diablo.png'
+import {
+  useGetActionGamesQuery,
+  useGetFightGamesQuery,
+  useGetRPGGamesQuery,
+  useGetSimulationGamesQuery,
+  useGetSportGamesQuery
+} from '../../services/api'
 
-const promocoes: Game[] = [
-  {
-    id: 1,
-    category: 'Ação',
-    description:
-      'Resident Evil 4, conhecido no Japão como Biohazard 4, é um jppg eletrônico survival horror',
-    title: 'Resident Evil 4',
-    system: 'Windows',
-    infos: ['-10%', 'R$249,90'],
-    image: resident
-  },
-  {
-    id: 2,
-    category: 'Ação',
-    description:
-      'Resident Evil 4, conhecido no Japão como Biohazard 4, é um jppg eletrônico survival horror',
-    title: 'Resident Evil 4',
-    system: 'PS5',
-    infos: ['-5%', 'R$289,90'],
-    image: resident
-  },
-  {
-    id: 3,
-    category: 'Ação',
-    description:
-      'Resident Evil 4, conhecido no Japão como Biohazard 4, é um jppg eletrônico survival horror',
-    title: 'Resident Evil 4',
-    system: 'Windows',
-    infos: ['-10%', 'R$249,90'],
-    image: resident
-  },
-  {
-    id: 4,
-    category: 'Ação',
-    description:
-      'Resident Evil 4, conhecido no Japão como Biohazard 4, é um jppg eletrônico survival horror',
-    title: 'Resident Evil 4',
-    system: 'Windows',
-    infos: ['-10%', 'R$249,90'],
-    image: resident
+const Categories = () => {
+  const { data: actionGames } = useGetActionGamesQuery()
+  const { data: fightGames } = useGetFightGamesQuery()
+  const { data: rpgGames } = useGetRPGGamesQuery()
+  const { data: simulationGames } = useGetSimulationGamesQuery()
+  const { data: sportGames } = useGetSportGamesQuery()
+
+  if (actionGames && fightGames && rpgGames && simulationGames && sportGames) {
+    return (
+      <>
+        <ProductsList
+          id="rpg"
+          games={rpgGames}
+          title="RPG"
+          background="black"
+        />
+        <ProductsList
+          id="action"
+          games={actionGames}
+          title="Ação"
+          background="gray"
+        />
+        <ProductsList
+          id="sport"
+          games={sportGames}
+          title="Esportes"
+          background="black"
+        />
+        <ProductsList
+          id="fight"
+          games={fightGames}
+          title="Luta"
+          background="gray"
+        />
+        <ProductsList
+          id="simulation"
+          games={simulationGames}
+          title="Simulação"
+          background="black"
+        />
+      </>
+    )
   }
-]
 
-const emBreve: Game[] = [
-  {
-    id: 5,
-    category: 'RPG',
-    description:
-      'Diablo IV é um RPG de ação em desenvolvimento pela Blizzard Entertainment',
-    title: 'Diablo IV',
-    system: 'Windows',
-    infos: ['17/05'],
-    image: diablo
-  },
-  {
-    id: 6,
-    category: 'RPG',
-    description: 'lorem ips',
-    title: 'Diablo IV',
-    system: 'Nintendo Switch',
-    infos: ['17/05'],
-    image: zelda
-  },
-  {
-    id: 7,
-    category: 'Ação',
-    description: 'Lorem Ips',
-    title: 'Star Wars',
-    system: 'PS5',
-    infos: ['17/05'],
-    image: starWars
-  },
-  {
-    id: 8,
-    category: 'Ação',
-    description:
-      'Resident Evil 4, conhecido no Japão como Biohazard 4, é um jppg eletrônico survival horror',
-    title: 'Resident Evil 4',
-    system: 'Windows',
-    infos: ['17/05'],
-    image: resident
-  }
-]
-
-const Categories = () => (
-  <>
-    <ProductsList games={promocoes} title="RPG" background="gray" />
-    <ProductsList games={emBreve} title="Ação" background="black" />
-    <ProductsList games={promocoes} title="Aventura" background="gray" />
-    <ProductsList games={emBreve} title="FPS" background="black" />
-  </>
-)
+  return <h4>Carregando ...</h4>
+}
 
 export default Categories
