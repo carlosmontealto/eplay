@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { cores } from '../../styles'
+import { colors } from '../../styles'
 
 export const Items = styled.ul`
   display: flex;
@@ -23,18 +23,19 @@ export const Action = styled.div`
 
 export const Item = styled.li`
   position: relative;
+  cursor: zoom-in;
+
   > img {
     width: 150px;
     height: 150px;
     border-radius: 8px;
-    border: 2px solid ${cores.branco};
+    border: 2px solid ${colors.white};
     object-fit: cover;
   }
   &:hover {
     ${Action} {
       opacity: 1;
       transition: opacity 0.5s ease;
-      cursor: pointer;
     }
   }
 `
@@ -58,7 +59,7 @@ export const Modal = styled.div`
     background-color: rgba(0, 0, 0, 0.73);
   }
 
-  &.visible {
+  &.is-visible {
     display: flex;
   }
 `
@@ -75,18 +76,22 @@ export const ModalContent = styled.div`
       font-size: 18px;
       font-weight: bold;
     }
+
+    img {
+      height: 16px;
+      width: 16px;
+      cursor: pointer;
+    }
   }
 
   img,
   iframe {
     display: block;
     max-width: 100%;
-    cursor: pointer;
   }
 
   > img {
     width: 100%;
-    cursor: default;
   }
 
   iframe {

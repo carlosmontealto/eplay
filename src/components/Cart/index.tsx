@@ -1,23 +1,18 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import Button from '../Button'
-import {
-  CartContainer,
-  CartItem,
-  Overlay,
-  Prices,
-  Quantity,
-  Sidebar
-} from './styles'
 import Tag from '../Tag'
 
+import { getTotalPrice, parseToBrl } from '../../utils'
 import { RootReducer } from '../../store'
-
 import { close, remove } from '../../store/reducers/cart'
-import { formataPreco } from '../ProductsList'
+
+import * as S from './styles'
 
 const Cart = () => {
   const { isOpen, items } = useSelector((state: RootReducer) => state.cart)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
@@ -29,44 +24,53 @@ const Cart = () => {
     dispatch(remove(id))
   }
 
-  const getTotalPrice = () => {
-    return items.reduce((acumulator, currencyValor) => {
-      return (acumulator += currencyValor.prices.current!)
-    }, 0)
+  const goToCheckout = () => {
+    navigate('/checkout')
+    closeCart()
   }
 
   return (
-    <CartContainer className={isOpen ? 'is-open' : ''}>
-      <Overlay onClick={closeCart} />
-      <Sidebar>
-        <ul>
-          {items.map((item) => (
-            <CartItem key={item.id}>
-              <img src={item.media.thumbnail} alt={item.name} />
-              <div>
-                <h3>{item.name}</h3>
-                <Tag>{item.details.category}</Tag>
-                <Tag>{item.details.system}</Tag>
-                <span>{formataPreco(item.prices.current)}</span>
-              </div>
-              <button onClick={() => removeItem(item.id)} type="button" />
-            </CartItem>
-          ))}
-        </ul>
-        <Quantity>{items.length} jogo(s) no carrinho</Quantity>
-        <Prices>
-          Total de R$ {formataPreco(getTotalPrice())}
-          <span>Em até 6x sem juros</span>
-        </Prices>
-        <Button
-          variant="secondary"
-          title="Clique aqui para finalizar a compra"
-          type="button"
-        >
-          Continue com a compra
-        </Button>
-      </Sidebar>
-    </CartContainer>
+    <S.CartContainer className={isOpen ? 'is-open' : ''}>
+      <S.Overlay onClick={closeCart} />
+      <S.Sidebar>
+        {items.length > 0 ? (
+          <>
+            <ul>
+              {items.map((item) => (
+                <S.CartItem key={item.id}>
+                  <img src={item.media.thumbnail} alt={item.name} />
+                  <div>
+                    <h3>{item.name}</h3>
+                    <Tag>{item.details.category}</Tag>
+                    <Tag>{item.details.system}</Tag>
+                    <span>{parseToBrl(item.prices.current)}</span>
+                  </div>
+                  <button onClick={() => removeItem(item.id)} type="button" />
+                </S.CartItem>
+              ))}
+            </ul>
+            <S.Quantity>{items.length} jogo(s) no carrinho</S.Quantity>
+            <S.Prices>
+              Total de R$ {parseToBrl(getTotalPrice(items))}
+              <span>Em até 6x sem juros</span>
+            </S.Prices>
+            <Button
+              variant="secondary"
+              title="Clique aqui para finalizar a compra"
+              type="button"
+              onClick={goToCheckout}
+            >
+              Continue com a compra
+            </Button>
+          </>
+        ) : (
+          <p className="empty-text">
+            O carrinho está vazio, adicione pelo menos um produto para continuar
+            a compra.
+          </p>
+        )}
+      </S.Sidebar>
+    </S.CartContainer>
   )
 }
 

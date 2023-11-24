@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux'
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 
 import { GlobalCss } from './styles'
 import Header from './components/Header'
